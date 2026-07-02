@@ -7,7 +7,9 @@
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{hyperref}
+\usepackage{tikz}
 \usepackage{mihajlo-elfak-logos}
+\usetikzlibrary{arrows.meta,positioning}
 
 \setsansfont{Latin Modern Sans}
 \setmonofont{Latin Modern Mono}
@@ -21,6 +23,7 @@
 \date{\small{\textit{Jun 2026, Niš}}}
 
 \newcommand{\code}[1]{\texttt{\small #1}}
+\newcommand{\tinycode}[1]{\texttt{\scriptsize #1}}
 
 \begin{document}
 
@@ -104,15 +107,88 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Ugovori toka i topologija}
+\begin{frame}{Spatial matching ugovor}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.54\textwidth}
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.64\linewidth}@{}}
+        \toprule
+        Tip & Pravilo poklapanja \\
+        \midrule
+        \tinycode{radius} & tačka vozila unutar zadatog radijusa \\
+        \tinycode{area\_buffer} & unutar poligona ili buffer zone \\
+        \tinycode{corridor} & udaljenost od OSM linijskog koridora \\
+        \bottomrule
+      \end{tabular}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{itemize}
+        \item 9 entiteta u početnom snapshot-u
+        \item 4 poligona, 4 \code{MultiLineString} koridora, 1 tačka
+        \item Isti \code{entity\_id}, OSM reference i pragovi za Spark i Flink
+        \item Distance se računaju metarski, ne preko sirovih stepeni
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Kafka ugovori događaja}
+  \small
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}@{}}
+    \toprule
+    Topic & Sadržaj & Ključ & Potrošači \\
+    \midrule
+    \tinycode{mobility.fcd} & položaj, brzina, lane, vreme & \tinycode{vehicle\_id} & traffic jobs \\
+    \tinycode{mobility.emissions} & CO2, NOx, PMx, fuel, noise & \tinycode{vehicle\_id} & pollution jobs \\
+    \tinycode{analytics.traffic} & agregati po entitetu i prozoru & engine/entity/window & mapa/report \\
+    \tinycode{analytics.pollution} & emisije po entitetu i prozoru & engine/entity/window & mapa/report \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{0.55em}
   \begin{itemize}
-    \item Kafka ulazi: \code{mobility.fcd}, \code{mobility.emissions}
-    \item Kafka rezultati: \code{analytics.traffic}, \code{analytics.pollution}
-    \item Spark i Flink koriste iste prozore, reference i pragove za matching
-    \item Topologija: Kafka KRaft, Spark master/worker, Flink JobManager/TaskManager
-    \item Run modes: \code{full}, \code{spark-only}, \code{flink-only}
-    \item Bez persistent Docker volume-a u početnoj infrastrukturi
+    \item JSON vrednosti, \code{schema\_version=1}, ISO 8601 event-time
+    \item Runtime argumenti prozora isti za Spark i Flink: tip, veličina, slide, watermark
   \end{itemize}
+\end{frame}
+
+\begin{frame}{Početna Docker topologija}
+  \centering
+  \resizebox{0.98\textwidth}{!}{%
+  \begin{tikzpicture}[
+      node distance=0.72cm and 0.95cm,
+      service/.style={draw, rounded corners=2pt, align=center, minimum width=2.15cm, minimum height=0.72cm, font=\scriptsize},
+      kafka/.style={service, fill=blue!9},
+      engine/.style={service, fill=yellow!18},
+      future/.style={service, dashed, fill=gray!8},
+      arrow/.style={-Latex, thick}
+    ]
+    \node[future] (sumo) {SUMO\\FCD + emissions};
+    \node[future, right=of sumo] (producer) {producer\\on demand};
+    \node[kafka, right=of producer] (kafka) {Kafka KRaft\\\tinycode{9092}/\tinycode{19092}};
+    \node[kafka, above=of kafka] (init) {\tinycode{kafka-init}\\4 topic-a};
+
+    \node[engine, right=1.15cm of kafka, yshift=0.56cm] (spark) {Spark\\master + 8 cores};
+    \node[engine, right=1.15cm of kafka, yshift=-0.56cm] (flink) {Flink\\JM + 8 slots};
+    \node[kafka, right=1.15cm of spark, yshift=-0.56cm] (out) {analytics\\traffic + pollution};
+    \node[future, right=of out] (map) {consumer\\map/report};
+    \node[service, below=1.15cm of kafka, fill=green!8, minimum width=4.4cm] (ref) {read-only spatial reference\\\tinycode{data/reference/}};
+
+    \draw[arrow] (sumo) -- (producer);
+    \draw[arrow] (producer) -- (kafka);
+    \draw[arrow] (init) -- (kafka);
+    \draw[arrow] (kafka) -- (spark);
+    \draw[arrow] (kafka) -- (flink);
+    \draw[arrow] (spark) -- (out);
+    \draw[arrow] (flink) -- (out);
+    \draw[arrow] (out) -- (map);
+    \draw[arrow] (ref) -- (spark);
+    \draw[arrow] (ref) -- (flink);
+  \end{tikzpicture}
+  }
+
+  \vspace{0.55em}
+  \small
+  Režimi: \code{full}, \code{spark-only}, \code{flink-only}; bez persistent Docker volume-a.
 \end{frame}
 
 \begin{frame}{Trenutno stanje}
