@@ -1,0 +1,94 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{wolverine}
+
+\usepackage{fontspec}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{mihajlo-elfak-logos}
+
+\setsansfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}
+\hypersetup{colorlinks=true, urlcolor=blue}
+\setbeamertemplate{navigation symbols}{}
+
+\title{Projekat II}
+\subtitle[Analitika mobilnih tokova]{Analitika velikih mobilnih tokova podataka}
+\author[Mihajlo Madić 2119]{Mihajlo Madić 2119}
+\institute[Big Data Systems]{Big Data Systems}
+\date{\small{\textit{Jun 2026, Niš}}}
+
+\newcommand{\code}[1]{\texttt{\small #1}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Cilj projekta}
+  Izgraditi i uporediti dva pipeline-a za stream analitiku nad velikim SUMO skupom podataka o gradskom saobraćaju:
+
+  \begin{itemize}
+    \item Apache Spark Structured Streaming
+    \item Apache Flink
+  \end{itemize}
+
+  Zajednički tok obrade:
+  \[
+    \text{SUMO} \rightarrow \text{Kafka} \rightarrow \text{Stream analitika} \rightarrow \text{Kafka} \rightarrow \text{Consumer / mapa}
+  \]
+\end{frame}
+
+\begin{frame}{Zahtevani analitički zadaci}
+  \begin{itemize}
+    \item Trendovi zagađenja u blizini značajnih prostornih entiteta
+    \item Intenzitet saobraćaja u blizini ulica, zona ili objekata
+    \item Tumbling i sliding prozori kao runtime parametri
+    \item Uporedivi rezultati iz Spark i Flink implementacije
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Ciljna arhitektura}
+  \begin{block}{Izvori}
+    SUMO FCD izlaz, SUMO emission izlaz, referentni entiteti iz OSM / Google Maps izvora
+  \end{block}
+
+  \begin{block}{Transport}
+    File-to-Kafka producer i Kafka topic-i za sirove i obrađene tokove
+  \end{block}
+
+  \begin{block}{Obrada}
+    Spark Structured Streaming i Flink implementacije nad ekvivalentnim ulazima
+  \end{block}
+
+  \begin{block}{Prikaz}
+    Kafka consumer sa map-oriented prikazom rezultata
+  \end{block}
+\end{frame}
+
+\begin{frame}{Planirane faze}
+  \begin{enumerate}
+    \item Bootstrap, arhitektura i setup odluke
+    \item SUMO generisanje podataka i definicija šema
+    \item Kafka i kontejnerska infrastruktura
+    \item Implementacija producer-a
+    \item Spark analitika
+    \item Flink analitika
+    \item Consumer i vizualizacija
+    \item Benchmarking i finalna prezentacija
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Trenutno stanje}
+  \begin{itemize}
+    \item Izbor grada
+    \item Dizajn Kafka topic-a i event schema
+    \item Metod za spatial matching
+    \item Konačan izbor container image-a za Kafka i Flink
+  \end{itemize}
+\end{frame}
+
+\end{document}
