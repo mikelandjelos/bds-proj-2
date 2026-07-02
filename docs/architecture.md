@@ -43,15 +43,32 @@ SUMO outputs (FCD, emissions)
 
 ## Analytical outputs
 
-Recommended output topics:
+Canonical output topics:
 
 - `analytics.pollution`
 - `analytics.traffic`
 
-Recommended input topics:
+Canonical input topics:
 
 - `mobility.fcd`
 - `mobility.emissions`
+
+The event contracts are documented in `docs/event-schemas.md`.
+
+## Docker topology
+
+The first infrastructure implementation should use the service topology documented in `docs/docker-topology.md`:
+
+- Kafka in single-node KRaft mode,
+- Spark standalone master and worker,
+- Flink session cluster with JobManager and TaskManager,
+- on-demand producer and consumer/map helper containers.
+
+The same Compose definition must support three run modes: `full`, `spark-only`, and `flink-only`. The engine-specific modes are required for fair benchmarking so the inactive engine does not consume local CPU or memory.
+
+No persistent Docker volumes are approved for the initial topology.
+
+Operational commands for the Compose stack are documented in `docs/operations-compose.md`.
 
 ## Fair-comparison rule
 

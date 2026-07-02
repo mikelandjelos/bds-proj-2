@@ -17,6 +17,10 @@ Available locally:
 - Avoid adding checkpoint scripts before a phase is fully implemented and approved.
 - Selected city for the SUMO phase: Toulouse, France.
 - SUMO will not be containerized for now. The SUMO phase should use a one-shot local generation script and document the exact command and outputs.
+- Kafka/event contracts are documented in `docs/event-schemas.md`.
+- Initial Docker topology is documented in `docs/docker-topology.md`.
+- Compose operations are documented in `docs/operations-compose.md`.
+- Phase 1 Docker topology checkpoint: `automation/phase1_docker_topology.sh`.
 
 ## Expected near-term repository layout
 
@@ -30,7 +34,6 @@ Planned areas:
 
 ## Next setup tasks
 
-1. Decide the initial Docker topology and image sources.
-2. Define canonical schemas for Kafka topics and downstream outputs.
-3. Implement the local one-shot SUMO data generation script.
-4. Validate that the local SUMO network covers the Toulouse OSM geometries in `data/reference/toulouse_spatial_entities.geojson`.
+1. Implement the local one-shot SUMO data generation script.
+2. Validate that the local SUMO network covers the Toulouse OSM geometries in `data/reference/toulouse_spatial_entities.geojson`.
+3. Implement the file-to-Kafka producer against `docs/event-schemas.md`.

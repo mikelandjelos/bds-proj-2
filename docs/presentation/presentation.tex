@@ -104,14 +104,26 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Ugovori toka i topologija}
+  \begin{itemize}
+    \item Kafka ulazi: \code{mobility.fcd}, \code{mobility.emissions}
+    \item Kafka rezultati: \code{analytics.traffic}, \code{analytics.pollution}
+    \item Spark i Flink koriste iste prozore, reference i pragove za matching
+    \item Topologija: Kafka KRaft, Spark master/worker, Flink JobManager/TaskManager
+    \item Run modes: \code{full}, \code{spark-only}, \code{flink-only}
+    \item Bez persistent Docker volume-a u početnoj infrastrukturi
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Trenutno stanje}
   \begin{itemize}
     \item Grad izabran: Toulouse, France
     \item Početni spatial reference snapshot dokumentovan sa OSM geometrijama
     \item SUMO odluka: lokalna one-shot skripta, bez kontejnerizacije za sada
-    \item Dizajn Kafka topic-a i event schema
+    \item Kafka topic-i, event schema i početna Docker topologija implementirani
     \item Ekvivalentna spatial matching semantika u Spark i Flink aplikacijama
-    \item Konačan izbor container image-a za Kafka i Flink
+    \item Compose režimi: \code{full}, \code{spark-only}, \code{flink-only}
+    \item Checkpoint: \code{automation/phase1\_docker\_topology.sh}
   \end{itemize}
 \end{frame}
 

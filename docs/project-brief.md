@@ -27,3 +27,5 @@ Source: `../BDS - Project2.pdf`
 - The selected city must be used for the SUMO scenario, spatial entity collection, and downstream analytics examples.
 - Initial spatial entity reference: `docs/spatial-entities.md`.
 - Machine-readable reference snapshot: `data/reference/toulouse_spatial_entities.geojson`.
+- Canonical event contracts: `docs/event-schemas.md`.
+- Initial Docker topology: `docs/docker-topology.md`.

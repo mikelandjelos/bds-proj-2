@@ -33,13 +33,16 @@ This repository follows the same operating pattern that worked well in project 1
 - City selection is fixed: Toulouse, France.
 - Initial Toulouse spatial entity reference is documented in `docs/spatial-entities.md` and `data/reference/toulouse_spatial_entities.geojson`; it contains OSM polygons for areas, a station point, and multiline road corridors.
 - SUMO is not containerized for now; data generation will be a local one-shot script in the SUMO phase.
+- Canonical Kafka event contracts are documented in `docs/event-schemas.md`.
+- Initial Docker topology, image-source decisions, and required run modes are documented in `docs/docker-topology.md`.
+- Compose operations are documented in `docs/operations-compose.md`.
+- Phase 1 Docker topology checkpoint is `automation/phase1_docker_topology.sh`.
 
 ## Open decisions
 
-- Kafka topic design needs to be fixed during the data/schema phase.
 - Streaming implementations must use equivalent spatial matching semantics over the same GeoJSON reference.
-- We need to confirm the final image choices for Kafka and Flink if BDE components are unavailable there.
+- App implementation language needs to be chosen before producer/consumer containers are built.
 
 ## Recommended next phase
 
-The next approved phase should settle the event schemas and the initial Docker topology before any application code is written.
+The next implementation phase should generate SUMO data or implement the file-to-Kafka producer.
