@@ -7,10 +7,6 @@ Available locally:
 - `docker compose`
 - `python3`
 - `java`
-- `pdflatex`
-
-Missing locally:
-
 - `sumo`
 
 ## Bootstrap decisions
@@ -19,6 +15,8 @@ Missing locally:
 - Track architecture and operational decisions in `docs/`.
 - Keep the presentation in Beamer under `slides/`.
 - Avoid adding checkpoint scripts before a phase is fully implemented and approved.
+- Selected city for the SUMO phase: Toulouse, France.
+- SUMO will not be containerized for now. The SUMO phase should use a one-shot local generation script and document the exact command and outputs.
 
 ## Expected near-term repository layout
 
@@ -32,7 +30,7 @@ Planned areas:
 
 ## Next setup tasks
 
-1. Choose and record the project city.
-2. Decide the initial Docker topology and image sources.
-3. Install or containerize SUMO for reproducible data generation.
-4. Define canonical schemas for Kafka topics and downstream outputs.
+1. Decide the initial Docker topology and image sources.
+2. Define canonical schemas for Kafka topics and downstream outputs.
+3. Implement the local one-shot SUMO data generation script.
+4. Validate that the local SUMO network covers the Toulouse OSM geometries in `data/reference/toulouse_spatial_entities.geojson`.

@@ -23,4 +23,7 @@ Source: `../BDS - Project2.pdf`
 
 - This is a streaming project, not a batch analytics project.
 - The repo should be organized around a reusable streaming pipeline and fair Spark/Flink comparison.
-- City selection is a blocker for the data-generation phase, but not for the bootstrap phase.
+- Selected city: Toulouse, France.
+- The selected city must be used for the SUMO scenario, spatial entity collection, and downstream analytics examples.
+- Initial spatial entity reference: `docs/spatial-entities.md`.
+- Machine-readable reference snapshot: `data/reference/toulouse_spatial_entities.geojson`.

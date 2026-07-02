@@ -82,11 +82,35 @@
   \end{enumerate}
 \end{frame}
 
+\begin{frame}{Izabrani grad}
+  \begin{block}{Toulouse, France}
+    Grad je fiksiran za SUMO scenario, OSM referentne entitete i primere downstream analitike.
+  \end{block}
+
+  \begin{itemize}
+    \item Dovoljno veliki urbani i prigradski saobraćajni tokovi
+    \item Aerodrom, glavna železnička stanica, gradski centar, stadion i bolnica
+    \item Prstenasti putevi i centralni koridori pogodni za merenje intenziteta saobraćaja
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Referentni prostorni entiteti}
+  \begin{itemize}
+    \item Snapshot: \code{data/reference/toulouse\_spatial\_entities.geojson}
+    \item POI/zone: airport, Matabiau, Capitole, Stadium, Purpan
+    \item Koridori: Périphérique Extérieur, Périphérique Intérieur, Route de Narbonne, Boulevard de Strasbourg
+    \item Geometrije entiteta: poligoni za zone, \code{Point} za Matabiau i \code{MultiLineString} za koridore
+    \item Svaki entitet ima stabilan ID, OSM reference i prag za matching
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Trenutno stanje}
   \begin{itemize}
-    \item Izbor grada
+    \item Grad izabran: Toulouse, France
+    \item Početni spatial reference snapshot dokumentovan sa OSM geometrijama
+    \item SUMO odluka: lokalna one-shot skripta, bez kontejnerizacije za sada
     \item Dizajn Kafka topic-a i event schema
-    \item Metod za spatial matching
+    \item Ekvivalentna spatial matching semantika u Spark i Flink aplikacijama
     \item Konačan izbor container image-a za Kafka i Flink
   \end{itemize}
 \end{frame}
